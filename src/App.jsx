@@ -4,6 +4,7 @@ const App = () => {
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const [error, setError] = useState('') 
   const [task, setTask] = useState(() => {
     const saved = localStorage.getItem('tasks')
     return saved ? JSON.parse(saved) : []
@@ -15,6 +16,14 @@ const App = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+
+    if (title.trim() === '' || description.trim() === '') {
+      setError('Please enter both Title and Description')
+      return;
+    }
+
+    setError('')
+
     const copyTask = [...task]
     copyTask.push({ title, description })
     setTask(copyTask)
@@ -32,7 +41,6 @@ const App = () => {
   return (
     <div className='bg-black min-h-screen w-full flex flex-col md:flex-row text-white'>
 
-      {/* LEFT */}
       <div className='w-full md:w-1/2 p-4 md:p-7'>
 
         <form onSubmit={submitHandler}>
@@ -40,6 +48,12 @@ const App = () => {
           <h1 className='text-3xl md:text-4xl p-2 md:p-4'>
             Add Notes
           </h1>
+
+          {error && (
+            <p className='text-red-500 text-sm mb-2 px-2'>
+              {error}
+            </p>
+          )}
 
           <input
             onChange={(e) => setTitle(e.target.value)}
@@ -65,7 +79,6 @@ const App = () => {
 
       </div>
 
-      {/* RIGHT */}
       <div className='w-full md:w-1/2 border-t-2 md:border-t-0 md:border-l-2 border-white p-4 md:p-7'>
 
         <h1 className='text-3xl md:text-4xl p-2 md:p-4'>
@@ -81,22 +94,20 @@ const App = () => {
                 className='flex flex-col justify-between w-full sm:w-60 h-56 p-5 bg-white rounded-lg text-black shadow-md overflow-hidden'
               >
 
-                {/* CONTENT (SCROLL AREA) */}
                 <div className='flex-1 overflow-y-auto pr-1'>
 
                   <h1 className='font-bold text-lg md:text-xl'>
                     {elem.title}
                   </h1>
 
-                  <div className='w-full h-[2px] bg-gray-300 my-2'></div>
+                  <div className='w-full h-0.5 bg-gray-300 my-2'></div>
 
-                  <p className='text-sm md:text-base break-words'>
+                  <p className='text-sm md:text-base wrap-break-word'>
                     {elem.description}
                   </p>
 
                 </div>
 
-                {/* BUTTON FIXED */}
                 <button
                   onClick={() => deleteTask(idx)}
                   className='bg-red-500 mt-3 rounded-sm w-full active:scale-95 text-white font-semibold py-1'
