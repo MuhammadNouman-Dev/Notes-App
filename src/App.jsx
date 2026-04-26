@@ -13,7 +13,6 @@ const App = () => {
     localStorage.setItem('tasks', JSON.stringify(task))
   }, [task])
 
-
   const submitHandler = (e) => {
     e.preventDefault();
     const copyTask = [...task]
@@ -31,79 +30,89 @@ const App = () => {
   }
 
   return (
-    <>
+    <div className='bg-black min-h-screen w-full flex flex-col md:flex-row text-white'>
 
-      <div className='bg-black h-screen w-full flex  text-white '>
+      {/* LEFT */}
+      <div className='w-full md:w-1/2 p-4 md:p-7'>
 
-        <div className=' h-full w-1/2 placeholder:text-gray-400 p-7'>
+        <form onSubmit={submitHandler}>
 
-          <form onSubmit={(e) => {
-            submitHandler(e)
-          }} >
-
-            <h1 className='text-4xl p-4'>
-              Add Notes
-            </h1>
-
-            <input onChange={(elem) => {
-              setTitle(elem.target.value);
-            }}
-              value={title}
-              className='text-white border-2 border-white w-full p-3 mt-5 rounded-sm '
-              type="text" placeholder='Enter Notes Heading' />
-
-            <textarea value={description}
-              onChange={(elem) => {
-                setDescription(elem.target.value);
-              }}
-
-              className='border-2 border-white w-full p-3 mt-5 rounded-sm '
-              placeholder='Write Details here ....' rows={10}>
-            </textarea>
-
-            <button className=' text-black bg-white font-semibold text-lg w-full py-1 border-2 border-white mt-5 rounded-sm active:scale-95' >
-              Add Note
-            </button>
-
-          </form>
-
-        </div>
-
-        <div className=' border-l-white border-l-2 h-full w-1/2 p-7 '>
-
-          <h1 className='text-4xl p-4' >
-            Recent Notes
+          <h1 className='text-3xl md:text-4xl p-2 md:p-4'>
+            Add Notes
           </h1>
 
-          <div className='flex mt-5 flex-wrap gap-5'>
+          <input
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
+            className='text-white border-2 border-white w-full p-3 mt-4 rounded-sm'
+            type="text"
+            placeholder='Enter Notes Heading'
+          />
 
-            {task.map((elem, idx) => {
-              return <div key={idx}
-                className=' flex flex-col justify-between h-65 w-55 p-6 bg-white rounded-lg text-black overflow-y-auto wrap-break-word relative bg-[url(/notes.png)] bg-size-[140%] bg-center'>
-                <div>
-                  <h1 className='font-bold text-xl'>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className='border-2 border-white w-full p-3 mt-4 rounded-sm'
+            placeholder='Write Details here ....'
+            rows={6}
+          />
+
+          <button className='text-black bg-white font-semibold text-lg w-full py-2 border-2 border-white mt-4 rounded-sm active:scale-95'>
+            Add Note
+          </button>
+
+        </form>
+
+      </div>
+
+      {/* RIGHT */}
+      <div className='w-full md:w-1/2 border-t-2 md:border-t-0 md:border-l-2 border-white p-4 md:p-7'>
+
+        <h1 className='text-3xl md:text-4xl p-2 md:p-4'>
+          Recent Notes
+        </h1>
+
+        <div className='flex flex-col sm:flex-row flex-wrap gap-4 mt-4'>
+
+          {task.map((elem, idx) => {
+            return (
+              <div
+                key={idx}
+                className='flex flex-col justify-between w-full sm:w-60 h-56 p-5 bg-white rounded-lg text-black shadow-md overflow-hidden'
+              >
+
+                {/* CONTENT (SCROLL AREA) */}
+                <div className='flex-1 overflow-y-auto pr-1'>
+
+                  <h1 className='font-bold text-lg md:text-xl'>
                     {elem.title}
                   </h1>
-                  <p>
+
+                  <div className='w-full h-[2px] bg-gray-300 my-2'></div>
+
+                  <p className='text-sm md:text-base break-words'>
                     {elem.description}
                   </p>
+
                 </div>
-                <button onClick={() => {
-                  deleteTask(idx);
-                }}
-                  className='bg-red-500 rounded-sm w-40 active:scale-95 text-white font-semibold'>
+
+                {/* BUTTON FIXED */}
+                <button
+                  onClick={() => deleteTask(idx)}
+                  className='bg-red-500 mt-3 rounded-sm w-full active:scale-95 text-white font-semibold py-1'
+                >
                   Delete Note
                 </button>
 
               </div>
-            })}
-          </div>
+            )
+          })}
 
         </div>
 
       </div>
 
-    </>
+    </div>
   )
 }
 
